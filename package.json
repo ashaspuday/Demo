@@ -1,0 +1,19 @@
+{
+  "name": "playwright-ecommerce-framework",
+  "version": "1.0.0",
+  "description": "Dummy POM-based Playwright framework for ecommerce login, add to cart, and checkout scenarios.",
+  "private": true,
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:report": "playwright show-report test-results/html-report",
+    "test:allure": "playwright test; npx allure generate test-results/allure-results -o test-results/allure-report --clean",
+    "allure:open": "npx allure open test-results/allure-report",
+    "install:playwright": "npx playwright install --with-deps"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.43.0",
+    "allure-playwright": "^2.0.0",
+    "allure-commandline": "^2.13.9"
+  }
+}

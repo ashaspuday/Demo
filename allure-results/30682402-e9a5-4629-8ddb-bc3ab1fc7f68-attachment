@@ -1,0 +1,75 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: api/tr30-viewing-synth.spec.js >> Viewing-Synth-Svf2-CosV3 image budget AWS check (API)
+- Location: tests/api/tr30-viewing-synth.spec.js:23:1
+
+# Error details
+
+```
+Error: channel response status
+
+expect(received).toBe(expected) // Object.is equality
+
+Expected: 200
+Received: 403
+```
+
+# Test source
+
+```ts
+  1  | const { test, expect } = require('@playwright/test');
+  2  | 
+  3  | // Playwright API test converted from Tr30-Viewing-Synth-Svf2-CosV3 AWS image budget check report.
+  4  | // Environment variables:
+  5  | //   TARGET_ENV=prd|stg|dev  (default: stg)
+  6  | //   PROVISIONER=synth-svf2-cosv3  (default)
+  7  | //   OAUTH_TOKEN=...  (optional Bearer token for authenticated requests)
+  8  | 
+  9  | const TARGETS = {
+  10 |   prd: {
+  11 |     translation: 'https://translation.api.autodesk.com',
+  12 |   },
+  13 |   stg: {
+  14 |     translation: 'https://translation-staging.api.autodesk.com',
+  15 |   },
+  16 |   dev: {
+  17 |     translation: 'https://translation-dev.api.autodesk.com',
+  18 |   },
+  19 | };
+  20 | 
+  21 | const DEFAULT_PROVISIONER = 'synth-svf2-cosv3';
+  22 | 
+  23 | test('Viewing-Synth-Svf2-CosV3 image budget AWS check (API)', async ({ request }) => {
+  24 |   const env = (process.env.TARGET_ENV || 'stg').toLowerCase();
+  25 |   const provisioner = process.env.PROVISIONER || DEFAULT_PROVISIONER;
+  26 |   const baseUrl = TARGETS[env]?.translation;
+  27 |   expect(baseUrl, `Unknown TARGET_ENV ${env}`).toBeTruthy();
+  28 | 
+  29 |   const authHeaders = {};
+  30 |   if (process.env.OAUTH_TOKEN) {
+  31 |     authHeaders.Authorization = `Bearer ${process.env.OAUTH_TOKEN}`;
+  32 |   }
+  33 | 
+  34 |   const url = `${baseUrl}/channel/v2/${provisioner}`;
+  35 | 
+  36 |   const resp = await request.get(url, { headers: authHeaders });
+> 37 |   expect(resp.status(), 'channel response status').toBe(200);
+     |                                                    ^ Error: channel response status
+  38 | 
+  39 |   const body = await resp.json().catch(() => null);
+  40 |   expect(body, 'channel response body present').toBeTruthy();
+  41 | 
+  42 |   const channel = body.channel || body;
+  43 |   expect(channel.id || body.id, 'channel id present').toBeTruthy();
+  44 | 
+  45 |   const context = channel.context === '' ? {} : channel.context;
+  46 |   expect(context !== undefined, 'channel context present').toBeTruthy();
+  47 | });
+  48 | 
+```
