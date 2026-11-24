@@ -5,3 +5,4 @@ html-report/
 .env
 job-applications.csv
 *.resume.pdf
+job-answers.md
