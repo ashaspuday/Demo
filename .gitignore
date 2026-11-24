@@ -3,3 +3,5 @@ test-results/
 html-report/
 .playwright/
 .env
+job-applications.csv
+*.resume.pdf
